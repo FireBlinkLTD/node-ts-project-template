@@ -1,5 +1,5 @@
 requires:
-  fbl: '>=1.5.2'
+  fbl: '>=1.6.0'
 #  applications:
 #   - git   
 
