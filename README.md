@@ -1,5 +1,8 @@
 # Node.js TypeScript project template generator
 
+[![CircleCI](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template.svg?style=svg)](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template)
+
+
 Allow to generate TypeScript based Node.js project with:
 - TS, JSON, YAML, Git Commit Message lints
 - Mocha TypeScript scaffolding with test coverage reporting

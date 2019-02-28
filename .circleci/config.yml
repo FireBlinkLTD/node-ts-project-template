@@ -58,6 +58,10 @@ jobs:
       # test docker build
       - setup_remote_docker
       - run:
-          command: | 
-            sudo docker build .
+          command: |
+            if [[ $ENVIRONMENT == "REMOTE" ]]; then              
+              docker build .
+            else            
+              sudo docker build .
+            fi            
           working_directory: ~/repo/test
