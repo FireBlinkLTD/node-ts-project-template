@@ -112,4 +112,13 @@ pipeline:
     <$ } $>       
 
     - '@': git.init.yml 
+
+    <$ if (!ctx.docker) { $>
+    - confirm:
+        message: 'Do you want to add Dockerfile and docker-compose.yml?'
+        default: true
+        assignResponseTo: $.ctx.docker
+    <$ } $>   
+
+    - '@': docker.init.yml     
     

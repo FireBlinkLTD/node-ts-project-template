@@ -36,6 +36,7 @@ jobs:
               -a \$.ctx.destination=./test \
               -a \$.ctx.git.init=true \
               -a \$.ctx.git.commit=true \
+              -a \$.ctx.docker=true \
               ./
 
       # build generated plugin
@@ -52,4 +53,11 @@ jobs:
       # test for outdated packages
       - run:
           command: yarn outdated
+          working_directory: ~/repo/test
+
+      # test docker build
+      - setup_remote_docker
+      - run:
+          command: | 
+            sudo docker build .
           working_directory: ~/repo/test

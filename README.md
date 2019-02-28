@@ -32,6 +32,7 @@ fbl \
  -a \$.ctx.destination=/path/to/project_dir \
  -a \$.ctx.git.init=true \
  -a \$.ctx.git.commit=true \
+ -a \$.ctx.docker=true \
  https://github.com/FireBlinkLTD/node-ts-project-template/archive/master.tar.gz
 ```
 

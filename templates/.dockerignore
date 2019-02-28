@@ -1,0 +1,10 @@
+*
+# source code
+!./src
+!./test
+!./index.ts
+
+# module configuration files
+!./package.json
+!./yarn.lock
+!./tsconfig.json

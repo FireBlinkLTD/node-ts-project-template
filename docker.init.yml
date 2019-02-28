@@ -1,0 +1,17 @@
+pipeline:
+  '--': 
+    - void
+
+    <$ if (ctx.docker.toString() === 'true') { $>
+    - cp:
+        from: templates/.dockerignore
+        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/
+
+    - cp:
+        from: templates/Dockerfile
+        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/
+
+    - '->':
+        contentFromFile: templates/docker-compose.yml
+        path: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/docker-compose.yml
+    <$ } $>
