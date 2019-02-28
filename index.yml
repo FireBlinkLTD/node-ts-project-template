@@ -1,0 +1,115 @@
+requires:
+  fbl: '>=1.5.2'
+  applications:
+   - yarn   
+
+pipeline:
+  '--':
+    <$ if (!ctx.name) { $>
+    - prompt:
+        message: 'Project name:'
+        default: <%- $.require('path').basename(cwd) %>
+        assignResponseTo: $.ctx.name          
+        schema:
+          type: string
+          maxLength: 214
+          minLength: 1
+          pattern: "^(?:@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*$"
+    <$ } $>
+
+    <$ if (!ctx.license) { $>
+    - prompt:
+        message: 'License:'
+        default: UNLICENSED
+        assignResponseTo: $.ctx.license          
+    <$ } $>
+
+    <$ if (!ctx.description) { $>
+    - prompt:
+        message: 'Description:'
+        default: '<%- ctx.name %>'
+        assignResponseTo: $.ctx.description
+    <$ } $>
+
+    <$ if (!ctx.author) { $>
+    - prompt:
+        message: 'Author:'
+        assignResponseTo: $.ctx.author          
+    <$ } $>
+
+    <$ if (!ctx.destination) { $>
+    - prompt:
+        message: 'Project folder:'
+        default: <%- cwd %>
+        assignResponseTo: $.ctx.destination          
+    <$ } $>
+    
+    # copy static files
+    - '--':
+        <$ [
+          '.commitlintrc.yml',
+          '.czrc',
+          '.gitignore',
+          '.huskyrc.yml',
+          '.lintstagedrc.yml',
+          '.mocharc.yml',
+          '.npmignore',
+          '.npmrc',
+          '.prettierignore',
+          '.prettierrc.yml',
+          'index.ts',
+          'tsconfig.json',
+          'tslint.json',          
+          'test',          
+        ].forEach(path => { $>
+        - cp:
+            from: templates/<$- path $>
+            to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/
+        <$ }); $>
+
+    # copy templates
+    - '--':
+        <$ [
+          'package.json',
+          'README.md',
+        ].forEach(path => { $>
+        - '->':
+            contentFromFile: templates/<$- path $>
+            path: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/<$- path $>
+        <$ }); $>
+
+    - exec:
+        command: yarn
+        args:
+          - install
+        wd: $ref:ctx.destination
+        options:
+          verbose: true
+          
+    - exec:
+        command: yarn
+        args:
+          - upgrade
+          - '--latest'
+        wd: $ref:ctx.destination
+        options:
+          verbose: true
+
+    - exec:
+        command: yarn
+        args:
+          - prettify
+        wd: <%- ctx.destination %>
+        options:
+          verbose: true
+
+    <$ if (!ctx.git) { ctx.git = {}; } $>
+    <$ if (!ctx.git.init) { $>
+    - confirm:
+        message: 'Do you want to init Git repository?'
+        default: true
+        assignResponseTo: $.ctx.git.init          
+    <$ } $>       
+
+    - '@': git.init.yml 
+    

@@ -1,0 +1,28 @@
+requires:
+  fbl: '>=1.5.2'
+#  applications:
+#   - git   
+
+pipeline:
+  '--':
+    - void
+    <$ if (ctx.git.commit.toString() === 'true') { $>
+    - exec:
+        command: git
+        args:
+          - add
+          - '.'
+        wd: $ref:ctx.destination
+        options:
+          verbose: true
+
+    - exec:
+        command: git
+        args:
+          - commit
+          - '-m'
+          - '"chore: initial commit"'
+        wd: $ref:ctx.destination
+        options:
+          verbose: true    
+    <$ } $>

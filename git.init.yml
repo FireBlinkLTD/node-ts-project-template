@@ -1,0 +1,26 @@
+requires:
+  fbl: '>=1.5.2'
+#  applications:
+#   - git   
+
+pipeline:
+  '--': 
+    - void
+    <$ if (ctx.git.init.toString() === 'true') { $>
+    - exec:
+        command: git
+        args:
+          - init
+        wd: $ref:ctx.destination
+        options:
+          verbose: true
+
+    <$ if (!ctx.git.commit) { $>
+    - confirm:
+        message: 'Do you want to make initial commit?'
+        default: true
+        assignResponseTo: $.ctx.git.commit          
+    <$ } $>
+
+    - '@': git.commit.yml           
+    <$ } $>
