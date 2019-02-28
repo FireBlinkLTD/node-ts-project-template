@@ -22,7 +22,7 @@ jobs:
           command: |
             git config --global user.email "you@example.com"
             git config --global user.name "Your Name"
-            
+
       # generate project
       - run: 
           name: Generate Project
@@ -31,7 +31,7 @@ jobs:
               --verbose \
               -a \$.ctx.name=test \
               -a \$.ctx.license=MIT \
-              -a \$.ctx.description=Test \
+              -a \$.ctx.description=My\ Test \
               -a \$.ctx.author=Foo \
               -a \$.ctx.destination=./test \
               -a \$.ctx.git.init=true \
