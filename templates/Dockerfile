@@ -16,4 +16,4 @@ RUN yarn build && \
 # Remove dev dependencies
 RUN yarn install --production
 
-CMD yarn test
+CMD yarn start
