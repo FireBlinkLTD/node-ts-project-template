@@ -1,0 +1,18 @@
+requires:
+  fbl: '>=1.6.0'
+
+pipeline:
+  '--': 
+    - void
+
+    <$ if (ctx.circleci.toString() === 'true') { $>
+    <$ if (ctx.docker.toString() === 'true') { $>
+    - cp:
+        from: templates/.circleci/config.docker.yml
+        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
+    <$ } else { $>        
+    - cp:
+        from: templates/.circleci/config.node_module.yml
+        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
+    <$ } $>
+    <$ } $>

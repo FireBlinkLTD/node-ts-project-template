@@ -54,7 +54,7 @@ pipeline:
           '.lintstagedrc.yml',
           '.mocharc.yml',
           '.npmignore',
-          '.npmrc',
+          '.nvmrc',
           '.prettierignore',
           '.prettierrc.yml',
           'index.ts',
@@ -103,6 +103,24 @@ pipeline:
         options:
           verbose: true
 
+    <$ if (!ctx.docker) { $>
+    - confirm:
+        message: 'Do you want to add Dockerfile and docker-compose.yml?'
+        default: true
+        assignResponseTo: $.ctx.docker
+    <$ } $>   
+
+    - '@': docker.init.yml 
+
+    <$ if (!ctx.circleci) { $>
+    - confirm:
+        message: 'Do you want to add CircleCI configuration?'
+        default: true
+        assignResponseTo: $.ctx.circleci
+    <$ } $>   
+
+    - '@': circleci.init.yml 
+
     <$ if (!ctx.git) { ctx.git = {}; } $>
     <$ if (!ctx.git.init) { $>
     - confirm:
@@ -112,13 +130,4 @@ pipeline:
     <$ } $>       
 
     - '@': git.init.yml 
-
-    <$ if (!ctx.docker) { $>
-    - confirm:
-        message: 'Do you want to add Dockerfile and docker-compose.yml?'
-        default: true
-        assignResponseTo: $.ctx.docker
-    <$ } $>   
-
-    - '@': docker.init.yml     
     

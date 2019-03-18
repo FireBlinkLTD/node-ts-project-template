@@ -3,14 +3,14 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8
+    - image: circleci/node:10
 
 jobs:
   build:
     <<: *defaults
     steps:
       - checkout
-
+           
       # install fbl
       - run: sudo npm i -g fbl
 
@@ -25,7 +25,7 @@ jobs:
 
       # generate project
       - run: 
-          name: Generate Project
+          name: Generate Project without Docker Support
           command: |
             fbl \
               --verbose \
@@ -36,16 +36,34 @@ jobs:
               -a \$.ctx.destination=./test \
               -a \$.ctx.git.init=true \
               -a \$.ctx.git.commit=true \
-              -a \$.ctx.docker=true \
-              ./
+              -a \$.ctx.docker=false \
+              -a \$.ctx.circleci=true \
+              ./             
 
-      # build generated plugin
-      # note: `yarn install` is part of plugin generator flow, so all dependencies should already be installed
+      - run: 
+          name: Generate Project with Docker Support
+          command: |
+            rm -rf ./test
+            fbl \
+              --verbose \
+              -a \$.ctx.name=test \
+              -a \$.ctx.license=MIT \
+              -a \$.ctx.description=My\ Test \
+              -a \$.ctx.author=Foo \
+              -a \$.ctx.destination=./test \
+              -a \$.ctx.git.init=true \
+              -a \$.ctx.git.commit=true \
+              -a \$.ctx.docker=true \
+              -a \$.ctx.circleci=true \
+              ./         
+
+      # build generated module
+      # note: `yarn install` is part of module generation flow, so all dependencies should already be installed
       - run:
           command: yarn build
           working_directory: ~/repo/test
 
-      # test generated plugin
+      # test generated module
       - run:
           command: yarn test
           working_directory: ~/repo/test
@@ -55,13 +73,4 @@ jobs:
           command: yarn outdated
           working_directory: ~/repo/test
 
-      # test docker build
-      - setup_remote_docker
-      - run:
-          command: |
-            if [[ $ENVIRONMENT == "REMOTE" ]]; then              
-              docker build .
-            else            
-              sudo docker build .
-            fi            
-          working_directory: ~/repo/test
+      

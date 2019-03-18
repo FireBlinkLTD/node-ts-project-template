@@ -1,7 +1,7 @@
 # ignore all
 *
 
-# expect compiled sources
+# include compiled sources only
 !dist/index.js
 !dist/index.js.map
 !dist/index.d.ts
