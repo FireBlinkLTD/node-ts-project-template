@@ -7,12 +7,12 @@ pipeline:
 
     <$ if (ctx.circleci.toString() === 'true') { $>
     <$ if (ctx.docker.toString() === 'true') { $>
-    - cp:
-        from: templates/.circleci/config.docker.yml
-        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
+    - '->':
+        contentFromFile: templates/.circleci/config.docker.yml
+        path: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
     <$ } else { $>        
-    - cp:
-        from: templates/.circleci/config.node_module.yml
-        to: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
+    - '->':
+        contentFromFile: templates/.circleci/config.node_module.yml
+        path: <%- $.fs.getAbsolutePath(ctx.destination, cwd) %>/.circleci/config.yml
     <$ } $>
     <$ } $>

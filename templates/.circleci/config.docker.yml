@@ -1,13 +1,15 @@
-# requires following ENV vars to be registered:
+# Requires following ENV vars to be registered:
 #
 # DOCKER_HUB_USERNAME
 # DOCKER_HUB_PASSWORD
+#
+# Note: make sure to update DOCKER_IMAGE_NAME env var below with correct value
 #
 version: 2
 
 defaults: &defaults
   environment:
-    DOCKER_IMAGE_NAME: apigeeks/a6s-k8s-keycloak-manager
+    DOCKER_IMAGE_NAME: <$- ctx.name $>
     
   working_directory: ~/repo
   docker:
