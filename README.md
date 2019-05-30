@@ -1,6 +1,6 @@
 # Node.js TypeScript project template generator
 
-[![CircleCI](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template.svg?style=svg)](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template)
+[![CircleCI](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template.svg?style=svg)](https://circleci.com/gh/FireBlinkLTD/node-ts-project-template) [![Greenkeeper badge](https://badges.greenkeeper.io/FireBlinkLTD/node-ts-project-template.svg)](https://greenkeeper.io/)
 
 
 Allow to generate TypeScript based Node.js project with:
